@@ -64,21 +64,26 @@ export default function LoginPage() {
       <div className="login-bg"></div>
       
       <div className="login-content">
-        <div className="login-avatar">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-            <circle cx="12" cy="7" r="4"></circle>
-          </svg>
+        <div className="login-header">
+          <div className="login-avatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ef2929" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '40px', height: '40px' }}>
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+              <path d="M12 8v4"></path>
+              <path d="M12 16h.01"></path>
+            </svg>
+          </div>
+          <div className="login-title">LUCIFER'S TERMINAL</div>
+          <div className="login-subtitle">Secure Gateway Access</div>
         </div>
 
         <form onSubmit={handleLogin} className="login-form">
-          <div className="login-input-wrapper" style={{ marginBottom: '8px' }}>
+          <div className="login-input-wrapper">
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               className="login-input"
-              placeholder="Username"
+              placeholder="System ID"
               required
               disabled={loading}
               style={{ textAlign: 'center', fontWeight: 'bold' }}
@@ -91,10 +96,10 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="login-input"
-              placeholder="Password"
+              placeholder="Passphrase"
               required
-              autoFocus
               disabled={loading}
+              style={{ textAlign: 'center' }}
             />
             {error && (
               <div className="login-error">
@@ -103,13 +108,15 @@ export default function LoginPage() {
             )}
           </div>
           
-          <button type="submit" disabled={loading} style={{ display: 'none' }}>Submit</button>
+          <button type="submit" className="login-btn" disabled={loading}>
+            {loading ? 'Authenticating...' : 'Initialize Connection'}
+          </button>
         </form>
 
         <div className="login-topbar">
-          <div>Kali Linux</div>
+          <div>LUCIFER NETWORK // AUTHORIZED PERSONNEL ONLY</div>
           <div className="login-topbar-right">
-            <span>en_US</span>
+            <span>SECURE-NODE</span>
             <span>{time}</span>
             <span className="login-power">⏻</span>
           </div>
