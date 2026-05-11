@@ -1,0 +1,50 @@
+=== MOCK KALI LINUX CHEAT SHEET ===
+
+1. BUILT-IN COMMANDS
+---------------------------------
+These commands are hardcoded and available out-of-the-box for all users.
+
+Command:    help
+Action:     Displays standard mock help text.
+
+Command:    whoami
+Action:     Returns `root (username)`.
+
+Command:    date
+Action:     Returns the simulated server time.
+
+THE 3-STEP TOKEN GENERATION HACK
+---------------------------------
+Users CANNOT simply run the exploit command. They must run this sequence in a single terminal session:
+
+1. Setup Command:   ./setup_env.sh
+   Action:          Configures virtual environment and downloads dependencies.
+
+2. Connect Command: ./connect --host Lucifers_Server_v01
+   Action:          Bounces proxy chain and connects to server securely.
+
+3. Exploit Command: ./run_exploit.sh --target=kali-core
+   Action:          Deploys payloads, bypasses firewall, generates TKN-XXXX.
+                    (This adds +1 Token to their account, but ONLY works if 
+                     steps 1 and 2 were run first in the same window).
+
+2. CREATING CUSTOM COMMANDS
+---------------------------------
+You can create your own commands via the Admin Dashboard.
+Use the `[delay:X]` tag (where X is milliseconds) to create streaming animations!
+
+Example Custom Command:
+Name:       nmap -sV target.com
+Output:
+[delay:500] Starting Nmap 7.93 ( https://nmap.org )
+[delay:2000] Nmap scan report for target.com (192.168.1.100)
+[delay:1000] Host is up (0.0020s latency).
+[delay:500] PORT   STATE SERVICE VERSION
+[delay:200] 22/tcp open  ssh     OpenSSH 8.4p1
+[delay:200] 80/tcp open  http    nginx 1.18.0
+
+3. TRACKING PROGRESS
+---------------------------------
+- All executed commands are tracked in the "Logs" tab.
+- Users who successfully run `generate-token` will have their Token count increased.
+- You can manually set Tasks for users in the "Tasks" tab.

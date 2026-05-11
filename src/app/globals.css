@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Ubuntu:wght@400;500;700&display=swap');
+
+:root {
+  /* XFCE Theme Colors */
+  --xfce-panel: #1e1e1e;
+  --xfce-panel-hover: #333333;
+  --xfce-panel-border: #000000;
+  --xfce-window-border: #2d2d2d;
+  --xfce-titlebar: #3c3c3c;
+  --xfce-titlebar-inactive: #2d2d2d;
+  
+  /* Kali Terminal Colors */
+  --term-bg: #111111;
+  --term-fg: #d3d7cf;
+  --term-root: #ef2929; /* Red */
+  --term-dir: #729fcf; /* Blue */
+  
+  --font-sys: 'Ubuntu', sans-serif;
+  --font-mono: 'Fira Code', monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #000;
+  font-family: var(--font-sys);
+  color: white;
+}
+
+/* =========================================
+   LOGIN SCREEN
+   ========================================= */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+.login-bg {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: radial-gradient(circle at top right, #1b2838, #050a12 60%, #000);
+  pointer-events: none;
+}
+.login-content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.login-avatar {
+  width: 96px; height: 96px;
+  background: #222;
+  border-radius: 50%;
+  border: 2px solid #555;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.login-avatar svg { width: 48px; height: 48px; }
+.login-form { display: flex; flex-direction: column; align-items: center; width: 256px; }
+.login-username { color: white; font-size: 18px; font-weight: bold; margin-bottom: 16px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
+.login-input-wrapper { width: 100%; position: relative; }
+.login-input {
+  width: 100%; background: #111; border: 1px solid #333; color: white;
+  padding: 8px 12px; border-radius: 4px; outline: none;
+}
+.login-input:focus { border-color: #555; }
+.login-error { position: absolute; bottom: -24px; width: 100%; text-align: center; color: #ef4444; font-size: 12px; }
+.login-topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 32px;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 16px; color: #ddd; font-size: 12px;
+  background: rgba(0,0,0,0.4); border-bottom: 1px solid rgba(0,0,0,0.5);
+}
+.login-topbar-right { display: flex; gap: 16px; }
+.login-power { color: white; cursor: pointer; font-weight: bold; }
+.login-power:hover { color: #ef4444; }
+
+/* =========================================
+   DESKTOP SCREEN
+   ========================================= */
+.desktop-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle at top right, #1b2838, #050a12 60%, #000000);
+}
+
+.xfce-panel {
+  background: var(--xfce-panel);
+  height: 32px;
+  border-bottom: 1px solid var(--xfce-panel-border);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  color: #dfdfdf;
+  font-size: 13px;
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 9999;
+}
+.xfce-panel-left, .xfce-panel-right { display: flex; height: 100%; align-items: center; }
+.xfce-panel-right { padding-right: 8px; gap: 12px; }
+.window-list { display: flex; margin-left: 8px; border-left: 1px solid #333; padding-left: 8px; height: 100%; overflow-x: auto; }
+
+.panel-btn {
+  height: 100%; display: flex; align-items: center; padding: 0 8px; cursor: pointer; transition: background 0.1s;
+}
+.panel-btn:hover { background: var(--xfce-panel-hover); }
+.panel-btn-active { background: #333; color: white; box-shadow: inset 0 2px 4px rgba(0,0,0,0.5); }
+.panel-icon-btn { display: flex; align-items: center; gap: 8px; }
+
+.start-menu {
+  position: absolute; top: 32px; left: 0; width: 250px;
+  background: var(--xfce-panel); border: 1px solid var(--xfce-panel-border);
+  shadow: 0 4px 12px rgba(0,0,0,0.5); z-index: 10000;
+}
+.start-menu-header { padding: 8px; border-bottom: 1px solid #333; font-weight: bold; }
+.start-menu-item { padding: 8px 16px; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.start-menu-item:hover { background: #333; }
+
+.desktop-icons-area {
+  position: absolute; top: 32px; bottom: 0; left: 0; right: 0;
+  padding: 8px; display: flex; flex-direction: column; gap: 8px; flex-wrap: wrap; align-content: flex-start;
+}
+.desktop-icon {
+  width: 74px; height: 84px; display: flex; flex-direction: column; align-items: center;
+  padding: 4px; cursor: pointer; border: 1px solid transparent; border-radius: 4px;
+}
+.desktop-icon:hover { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+.desktop-icon-text {
+  color: white; font-size: 12px; text-shadow: 1px 1px 2px black, -1px -1px 2px black, 1px -1px 2px black, -1px 1px 2px black;
+  text-align: center; margin-top: 4px; line-height: 1.2; word-wrap: break-word; width: 100%;
+}
+
+/* =========================================
+   TERMINAL & WINDOWS
+   ========================================= */
+.xfce-window {
+  background: var(--term-bg); border: 1px solid var(--xfce-window-border);
+  border-radius: 4px 4px 0 0; box-shadow: 0 5px 15px rgba(0,0,0,0.8), 0 0 0 1px rgba(0,0,0,0.5);
+  display: flex; flex-direction: column; position: absolute;
+}
+.xfce-window-maximized {
+  top: 32px !important; left: 0 !important; width: 100% !important; height: calc(100vh - 32px) !important;
+  border-radius: 0; border: none;
+}
+.xfce-window-normal {
+  top: 50px; width: calc(100% - 20px); left: 10px; height: 400px;
+}
+@media (min-width: 640px) {
+  .xfce-window-normal { width: 600px; left: 50px; }
+}
+
+.xfce-titlebar {
+  background: linear-gradient(to bottom, #4a4a4a, var(--xfce-titlebar)); height: 28px;
+  border-bottom: 1px solid #111; display: flex; align-items: center; justify-content: space-between;
+  padding: 0 6px; color: #ccc; font-size: 13px; font-weight: 500; border-radius: 3px 3px 0 0; cursor: move;
+}
+.xfce-titlebar-inactive { background: var(--xfce-titlebar-inactive); color: #888; }
+.window-controls { display: flex; gap: 4px; }
+.win-btn {
+  width: 16px; height: 16px; border: 1px solid #111; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; cursor: pointer; background: #555; color: transparent; font-size: 10px;
+}
+.win-btn:hover { color: #fff; }
+.win-btn.close { background: #cc0000; }
+.win-btn.close:hover { background: #ff0000; }
+
+.terminal-content {
+  flex: 1; padding: 4px; overflow-y: auto; font-family: var(--font-mono); font-size: 13px; color: var(--term-fg); line-height: 1.2;
+}
+.term-line { white-space: pre-wrap; margin-bottom: 4px; }
+.term-input-wrapper { display: flex; margin-top: 2px; }
+.term-prompt { flex-shrink: 0; margin-right: 4px; white-space: pre-wrap; }
+.term-input { flex: 1; background: transparent; border: none; outline: none; color: var(--term-fg); font-family: var(--font-mono); font-size: 13px; caret-color: #fff; margin-bottom: 1px; align-self: flex-end; }
+
+/* =========================================
+   ADMIN PANEL
+   ========================================= */
+.admin-layout { min-height: 100vh; background: #0f1115; color: white; }
+.admin-nav { border-bottom: 1px solid var(--xfce-panel-border); padding: 16px; display: flex; justify-content: space-between; align-items: center; background: rgba(22,27,34,0.8); }
+.admin-title { font-size: 20px; font-weight: bold; color: var(--term-dir); font-family: var(--font-mono); }
+.admin-nav-links { display: flex; gap: 16px; font-size: 14px; font-family: var(--font-mono); color: #888; }
+.admin-nav-links a:hover { color: white; }
+.admin-main { padding: 32px; max-width: 1200px; margin: 0 auto; }
+
+.admin-grid { display: grid; gap: 32px; }
+@media (min-width: 768px) { .admin-grid { grid-template-columns: 1fr 1fr; } }
+.admin-panel { background: rgba(255,255,255,0.05); border: 1px solid #333; padding: 24px; border-radius: 8px; }
+.admin-panel-title { font-size: 20px; font-family: var(--font-mono); color: var(--term-dir); margin-bottom: 24px; }
+.admin-form { display: flex; flex-direction: column; gap: 16px; }
+.admin-form-group { display: flex; flex-direction: column; gap: 4px; }
+.admin-label { font-size: 14px; font-family: var(--font-mono); color: #888; }
+.admin-input, .admin-textarea { background: #111; border: 1px solid #333; color: white; padding: 8px; border-radius: 4px; font-family: var(--font-mono); }
+.admin-textarea { min-height: 150px; resize: vertical; }
+.admin-btn { background: #2d2d2d; color: white; border: 1px solid #111; padding: 10px; cursor: pointer; text-align: center; font-family: var(--font-mono); border-radius: 4px; }
+.admin-btn:hover { background: #3c3c3c; }
+
+.admin-list { display: flex; flex-direction: column; gap: 16px; max-height: 600px; overflow-y: auto; }
+.admin-list-item { border: 1px solid #333; padding: 16px; border-radius: 4px; background: rgba(0,0,0,0.3); }
+.admin-list-title { font-family: var(--font-mono); color: var(--term-dir); font-weight: bold; margin-bottom: 8px; display: flex; justify-content: space-between; }
+.admin-list-delay { font-size: 12px; color: #888; font-weight: normal; }
+.admin-list-output { font-size: 12px; font-family: var(--font-mono); color: #888; white-space: pre-wrap; }
