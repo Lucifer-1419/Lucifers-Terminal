@@ -46,8 +46,16 @@ body {
 .login-bg {
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: radial-gradient(circle at top right, #1b2838, #050a12 60%, #000);
+  background: radial-gradient(circle at top right, #2a0808, #000000 70%, #000);
   pointer-events: none;
+}
+.login-bg::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-image: linear-gradient(0deg, transparent 24%, rgba(255, 0, 0, 0.05) 25%, rgba(255, 0, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 0, 0, 0.05) 75%, rgba(255, 0, 0, 0.05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(255, 0, 0, 0.05) 25%, rgba(255, 0, 0, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 0, 0, 0.05) 75%, rgba(255, 0, 0, 0.05) 76%, transparent 77%, transparent);
+  background-size: 50px 50px;
+  opacity: 0.5;
 }
 .login-content {
   position: relative;
@@ -55,37 +63,71 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(239, 41, 41, 0.2);
+  padding: 48px;
+  border-radius: 12px;
+  box-shadow: 0 0 40px rgba(239, 41, 41, 0.1), inset 0 0 20px rgba(0,0,0,0.8);
+}
+.login-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+.login-title {
+  color: #ef2929;
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-shadow: 0 0 10px rgba(239, 41, 41, 0.5);
+  margin-bottom: 8px;
+}
+.login-subtitle {
+  color: #888;
+  font-size: 12px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
 }
 .login-avatar {
-  width: 96px; height: 96px;
-  background: #222;
+  width: 80px; height: 80px;
+  background: rgba(0,0,0,0.5);
   border-radius: 50%;
-  border: 2px solid #555;
-  margin-bottom: 16px;
+  border: 1px solid #ef2929;
+  margin: 0 auto 24px auto;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  box-shadow: 0 0 15px rgba(239, 41, 41, 0.3);
 }
-.login-avatar svg { width: 48px; height: 48px; }
-.login-form { display: flex; flex-direction: column; align-items: center; width: 256px; }
-.login-username { color: white; font-size: 18px; font-weight: bold; margin-bottom: 16px; text-shadow: 0 1px 2px rgba(0,0,0,0.5); }
-.login-input-wrapper { width: 100%; position: relative; }
+.login-form { display: flex; flex-direction: column; align-items: center; width: 280px; }
+.login-input-wrapper { width: 100%; position: relative; margin-bottom: 16px; }
 .login-input {
-  width: 100%; background: #111; border: 1px solid #333; color: white;
-  padding: 8px 12px; border-radius: 4px; outline: none;
+  width: 100%; background: rgba(0,0,0,0.5); border: 1px solid #333; color: white;
+  padding: 12px 16px; border-radius: 4px; outline: none; font-family: var(--font-mono);
+  transition: all 0.3s ease;
 }
-.login-input:focus { border-color: #555; }
-.login-error { position: absolute; bottom: -24px; width: 100%; text-align: center; color: #ef4444; font-size: 12px; }
+.login-input:focus { border-color: #ef2929; box-shadow: 0 0 10px rgba(239, 41, 41, 0.2); }
+.login-error { position: absolute; bottom: -20px; width: 100%; text-align: center; color: #ef4444; font-size: 12px; font-weight: bold; }
+.login-btn {
+  width: 100%; background: #ef2929; color: white; border: none; padding: 12px;
+  border-radius: 4px; font-family: var(--font-mono); font-weight: bold; cursor: pointer;
+  margin-top: 8px; transition: all 0.3s; text-transform: uppercase; letter-spacing: 1px;
+}
+.login-btn:hover { background: #ff3333; box-shadow: 0 0 15px rgba(239, 41, 41, 0.4); }
+.login-btn:disabled { background: #555; cursor: not-allowed; box-shadow: none; }
+
 .login-topbar {
   position: fixed; top: 0; left: 0; right: 0; height: 32px;
   display: flex; justify-content: space-between; align-items: center;
-  padding: 0 16px; color: #ddd; font-size: 12px;
-  background: rgba(0,0,0,0.4); border-bottom: 1px solid rgba(0,0,0,0.5);
+  padding: 0 16px; color: #888; font-size: 12px; font-family: var(--font-mono);
+  background: rgba(0,0,0,0.8); border-bottom: 1px solid rgba(239, 41, 41, 0.2);
 }
-.login-topbar-right { display: flex; gap: 16px; }
-.login-power { color: white; cursor: pointer; font-weight: bold; }
-.login-power:hover { color: #ef4444; }
+.login-topbar-right { display: flex; gap: 16px; align-items: center; }
+.login-power { color: #ef2929; cursor: pointer; font-weight: bold; font-size: 14px; }
+.login-power:hover { color: #ff3333; text-shadow: 0 0 5px #ef2929; }
 
 /* =========================================
    DESKTOP SCREEN
