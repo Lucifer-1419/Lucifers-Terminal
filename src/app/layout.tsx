@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Kali Mock Terminal',
-  description: 'Mobile optimized mock terminal interface',
+  title: 'Kali Linux Environment',
+  description: 'Mobile optimized terminal interface',
 };
 
 export default function RootLayout({

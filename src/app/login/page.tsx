@@ -12,6 +12,16 @@ export default function LoginPage() {
   const router = useRouter();
 
   useEffect(() => {
+    fetch('/api/auth/me')
+      .then(res => res.json())
+      .then(data => {
+        if (data.authenticated) {
+          if (data.role === 'ADMIN') router.push('/admin');
+          else router.push('/desktop');
+        }
+      })
+      .catch(() => {});
+
     setTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
     const interval = setInterval(() => {
       setTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));

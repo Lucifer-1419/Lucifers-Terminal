@@ -203,7 +203,7 @@ export default function AdminDashboard() {
         <div className="admin-grid">
           <div className="admin-panel">
             <h2 className="admin-panel-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
-              Create Mock Command
+              Create Custom Command
               <a href="/commands_reference.txt" target="_blank" style={{ fontSize: '14px', color: '#ceaa61', textDecoration: 'underline' }}>View Built-in Cheat Sheet</a>
             </h2>
             <p style={{ color: '#888', fontSize: '12px', marginBottom: '16px' }}>Tip: Use <code>[delay:ms]</code> for streaming output. Example:<br/><code>[delay:500] Fetching...<br/>[delay:1000] Done.</code></p>
@@ -213,7 +213,7 @@ export default function AdminDashboard() {
                 <input type="text" value={cmdName} onChange={e => setCmdName(e.target.value)} className="admin-input" placeholder="e.g. apt-get update" required />
               </div>
               <div className="admin-form-group">
-                <label className="admin-label">Mock Output</label>
+                <label className="admin-label">Command Output</label>
                 <textarea value={output} onChange={e => setOutput(e.target.value)} className="admin-textarea" placeholder="[delay:500] Hit:1 http://kali.download..." required />
               </div>
               <div className="admin-form-group">
@@ -224,7 +224,7 @@ export default function AdminDashboard() {
             </form>
           </div>
           <div className="admin-panel">
-            <h2 className="admin-panel-title">Active Mocks</h2>
+            <h2 className="admin-panel-title">Active Custom Commands</h2>
             <div className="admin-list">
               {commands.map(cmd => (
                 <div key={cmd.id} className="admin-list-item">

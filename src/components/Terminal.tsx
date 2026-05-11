@@ -14,7 +14,7 @@ export default function Terminal({ id }: { id: string }) {
   const isActive = activeWindowId === id;
   
   const [logs, setLogs] = useState<Log[]>([
-    { type: 'system', content: '┌──(root㉿kali)-[~]\n└─# Type "help" for a list of mock commands.' }
+    { type: 'system', content: '┌──(root㉿kali)-[~]\n└─# Type "help" for a list of commands.' }
   ]);
   const [input, setInput] = useState('');
   const [isProcessing, setIsProcessing] = useState(false);
