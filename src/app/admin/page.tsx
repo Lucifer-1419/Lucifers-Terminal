@@ -147,11 +147,11 @@ export default function AdminDashboard() {
   );
 
   return (
-    <div style={{ display: 'flex', height: '100vh', background: '#050505', color: '#fff', fontFamily: 'monospace' }}>
+    <div className="admin-layout">
       
       {/* Sidebar Navigation */}
-      <div style={{ width: '260px', borderRight: '1px solid #222', display: 'flex', flexDirection: 'column', background: '#0a0a0a' }}>
-        <div style={{ padding: '24px', borderBottom: '1px solid #222', marginBottom: '16px' }}>
+      <div className="admin-sidebar">
+        <div className="admin-sidebar-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <Server color="#ef2929" size={24} />
             <div>
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        <div className="admin-sidebar-nav">
           <NavItem id="overview" icon={LayoutDashboard} label="Global Overview" />
           <NavItem id="users" icon={Users} label="Operative Network" />
           <NavItem id="logs" icon={Activity} label="Global Telemetry" />
@@ -169,23 +169,23 @@ export default function AdminDashboard() {
           <NavItem id="commands" icon={TerminalSquare} label="Command Logic" />
         </div>
 
-        <div style={{ padding: '24px', borderTop: '1px solid #222', fontSize: '10px', color: '#555' }}>
+        <div className="admin-sidebar-footer">
           SYSTEM STATUS: ONLINE<br/>
           ENCRYPTION: AES-256
         </div>
       </div>
 
       {/* Main Content Area */}
-      <div style={{ flex: 1, overflowY: 'auto', padding: '40px', background: 'radial-gradient(circle at top right, #110505 0%, #050505 100%)' }}>
+      <div className="admin-main">
         
         {/* OVERVIEW TAB */}
         {tab === 'overview' && !selectedUser && (
           <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
-            <h2 style={{ fontSize: '24px', marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <h2 className="admin-panel-title">
               <Cpu color="#ceaa61" /> System Overview
             </h2>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', marginBottom: '40px' }}>
+            <div className="admin-kpi-grid">
               {[
                 { label: 'Total Tokens Mined', value: totalTokens, color: '#ceaa61' },
                 { label: 'Active Operatives', value: activeOperatives, color: '#4ade80' },
@@ -199,7 +199,7 @@ export default function AdminDashboard() {
               ))}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+            <div className="admin-content-grid">
               <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px' }}>
                 <h3 style={{ fontSize: '14px', color: '#888', marginBottom: '16px', borderBottom: '1px solid #222', paddingBottom: '8px' }}>Recent Telemetry</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -273,7 +273,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Stats Row */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginTop: '32px', paddingTop: '32px', borderTop: '1px solid #222' }}>
+              <div className="admin-profile-stats">
                 <div>
                   <div style={{ fontSize: '12px', color: '#888', marginBottom: '8px' }}>Tokens Mined</div>
                   <div style={{ fontSize: '28px', color: '#ceaa61', fontWeight: 'bold' }}>{selectedUser.tokens}</div>
@@ -324,12 +324,12 @@ export default function AdminDashboard() {
         {tab === 'users' && !selectedUser && (
           <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '32px' }}>
-              <h2 style={{ fontSize: '24px', margin: 0, display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <h2 className="admin-panel-title">
                 <Users color="#60a5fa" /> Operative Network
               </h2>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '32px' }}>
+            <div className="admin-content-grid-alt">
               {/* Create User Form */}
               <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px', height: 'fit-content' }}>
                 <h3 style={{ fontSize: '14px', color: '#888', marginBottom: '16px', borderBottom: '1px solid #222', paddingBottom: '8px' }}>Deploy New Operative</h3>
@@ -382,17 +382,17 @@ export default function AdminDashboard() {
         {/* GLOBAL TELEMETRY TAB */}
         {tab === 'logs' && !selectedUser && (
           <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
-            <h2 style={{ fontSize: '24px', marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <h2 className="admin-panel-title">
               <Activity color="#4ade80" /> Global Telemetry
             </h2>
-            <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '120px 100px 150px 1fr', paddingBottom: '12px', borderBottom: '1px solid #222', color: '#888', fontSize: '12px', fontWeight: 'bold', marginBottom: '12px' }}>
+            <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px', overflowX: 'auto' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '120px 100px 150px 1fr', paddingBottom: '12px', borderBottom: '1px solid #222', color: '#888', fontSize: '12px', fontWeight: 'bold', marginBottom: '12px', minWidth: '600px' }}>
                 <div>TIMESTAMP</div>
                 <div>STATUS</div>
                 <div>OPERATIVE</div>
                 <div>COMMAND</div>
               </div>
-              <div style={{ maxHeight: '600px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <div style={{ maxHeight: '600px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '600px' }}>
                 {logs.map(log => (
                   <div key={log.id} style={{ display: 'grid', gridTemplateColumns: '120px 100px 150px 1fr', fontSize: '13px', alignItems: 'center', background: log.isSuccess ? 'rgba(74,222,128,0.02)' : 'rgba(239,41,41,0.02)', padding: '8px', borderRadius: '4px' }}>
                     <span style={{ color: '#555' }}>{new Date(log.createdAt).toLocaleTimeString()}</span>
@@ -410,10 +410,10 @@ export default function AdminDashboard() {
         {/* MISSIONS TAB */}
         {tab === 'tasks' && !selectedUser && (
           <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
-            <h2 style={{ fontSize: '24px', marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <h2 className="admin-panel-title">
               <Target color="#ceaa61" /> Mission Control
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '32px' }}>
+            <div className="admin-content-grid-alt">
               <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px', height: 'fit-content' }}>
                 <h3 style={{ fontSize: '14px', color: '#888', marginBottom: '16px', borderBottom: '1px solid #222', paddingBottom: '8px' }}>Assign New Mission</h3>
                 <form onSubmit={handleCreateTask} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -449,10 +449,10 @@ export default function AdminDashboard() {
         {/* CUSTOM COMMANDS TAB */}
         {tab === 'commands' && !selectedUser && (
           <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
-            <h2 style={{ fontSize: '24px', marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <h2 className="admin-panel-title">
               <TerminalSquare color="#f87171" /> Command Logic Core
             </h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '32px' }}>
+            <div className="admin-content-grid-alt">
               <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px', height: 'fit-content' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #222', paddingBottom: '8px' }}>
                   <h3 style={{ fontSize: '14px', color: '#888', margin: 0 }}>Register Command</h3>
@@ -527,8 +527,41 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* Basic Keyframes for smooth tab switching */}
+      {/* Basic Keyframes for smooth tab switching and media queries */}
       <style dangerouslySetInnerHTML={{__html: `
+        .admin-layout { display: flex; height: 100vh; background: #050505; color: #fff; font-family: monospace; flex-direction: row; }
+        .admin-sidebar { width: 260px; border-right: 1px solid #222; display: flex; flex-direction: column; background: #0a0a0a; flex-shrink: 0; }
+        .admin-sidebar-header { padding: 24px; border-bottom: 1px solid #222; margin-bottom: 16px; }
+        .admin-sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; overflow-x: hidden; }
+        .admin-sidebar-footer { padding: 24px; border-top: 1px solid #222; font-size: 10px; color: #555; }
+        .admin-main { flex: 1; overflow-y: auto; padding: 40px; background: radial-gradient(circle at top right, #110505 0%, #050505 100%); }
+        .admin-panel-title { font-size: 24px; margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+        .admin-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px; }
+        .admin-content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .admin-content-grid-alt { display: grid; grid-template-columns: 1fr 3fr; gap: 32px; }
+        .admin-profile-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 32px; padding-top: 32px; border-top: 1px solid #222; }
+
+        @media (max-width: 1024px) {
+          .admin-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+          .admin-layout { flex-direction: column; }
+          .admin-sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #222; flex-direction: row; align-items: center; justify-content: space-between; padding: 10px 20px; }
+          .admin-sidebar-header { padding: 0; border: none; margin: 0; }
+          .admin-sidebar-nav { flex-direction: row; overflow-x: auto; flex: unset; margin-left: 20px; }
+          .admin-sidebar-nav button { white-space: nowrap; padding: 8px 12px; font-size: 12px; border-left: none !important; border-bottom: 3px solid transparent; }
+          .admin-sidebar-nav button[style*="border-left"] { border-bottom: 3px solid #ef2929 !important; }
+          .admin-sidebar-footer { display: none; }
+          
+          .admin-main { padding: 20px; }
+          .admin-kpi-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px; }
+          .admin-content-grid { grid-template-columns: 1fr; }
+          .admin-content-grid-alt { grid-template-columns: 1fr; }
+          .admin-profile-stats { grid-template-columns: 1fr; }
+          .admin-panel-title { font-size: 20px; margin-bottom: 20px; }
+        }
+
         @keyframes fadeIn {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
