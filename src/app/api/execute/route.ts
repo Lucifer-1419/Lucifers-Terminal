@@ -97,36 +97,52 @@ export async function POST(req: Request) {
         data: { tokens: { increment: 1 } }
       });
 
-      const hackerOutput = `[delay:800] [color:cyan][*][color:reset] Initializing MSF Exploit Framework...
-[delay:1000] [color:cyan][*][color:reset] Scanning target ports and protocols...
-[delay:1200] [color:green][+][color:reset] Port 443 (HTTPS) is OPEN. Vulnerability found in SSH daemon.
-[delay:1500] [color:cyan][*][color:reset] Injecting memory payload...
-[delay:400] [update-line][color:cyan][*][color:reset] Injecting memory payload... [###.................] 15%
-[delay:400] [update-line][color:cyan][*][color:reset] Injecting memory payload... [#######.............] 35%
-[delay:600] [update-line][color:cyan][*][color:reset] Injecting memory payload... [############........] 60%
-[delay:500] [update-line][color:cyan][*][color:reset] Injecting memory payload... [#################...] 85%
-[delay:400] [update-line][color:cyan][*][color:reset] Injecting memory payload... [####################] 100%
-[delay:1000] [color:green][+][color:reset] Payload successfully injected into kernel space.
+      const hackerOutput = `[delay:800] [color:cyan][*][color:reset] Initializing MSF Exploit Framework v6.4.1...
+[delay:1000] [color:cyan][*][color:reset] Scanning target ports and protocols on 192.168.1.100...
+[delay:1200] [color:magenta][+][color:reset] Port 443 (HTTPS) is OPEN. Vulnerability found in SSH daemon.
+[delay:800] [color:cyan][*][color:reset] Preparing reverse TCP handler on local port 4444...
+[delay:1500] [color:cyan][*][color:reset] Injecting primary payload into memory...
+[delay:400] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▱▱▱▱▱▱▱▱▱[color:reset] 10%
+[delay:400] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▱▱▱▱▱▱▱[color:reset] 30%
+[delay:600] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▰▰▰▱▱▱▱[color:reset] 60%
+[delay:500] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▰▰▰▰▰▱▱[color:reset] 85%
+[delay:600] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▰▰▰▰▰▰▰[color:reset] 100%
+[delay:1000] [color:green][+][color:reset] Payload successfully injected into kernel space. Meterpreter session 1 opened.
 [delay:1200] [color:cyan][*][color:reset] Bypassing primary Neural-Net Firewall...
-[delay:1500] [color:red][!][color:reset] WARNING: IDS detection spike detected!
-[delay:1200] [color:yellow][>][color:reset] Rerouting packet transmission through Tor network...
-[delay:1800] [color:green][+][color:reset] Reroute successful. Firewall bypassed.
-[delay:1000] [color:cyan][*][color:reset] Initiating brute-force cryptographic hash extraction...
-[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] 0x8F9B2A... FAILED
-[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] 0x11C9D2... FAILED
-[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] 0x7B22F1... FAILED
-[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] 0x4A00B1... FAILED
-[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] 0x9D8C7B... FAILED
-[delay:1000] [update-line][color:green][+][color:reset] [CRACKING] 0xFF28D9... MATCH FOUND!
-[delay:1500] [color:cyan][*][color:reset] Allocating secure seed...
-[delay:1000] [color:cyan][*][color:reset] Generating token...
-[delay:2000] 
-[color:green]==============================================
-  [color:cyan]ROOT PRIVILEGE TOKEN GRANTED:[color:reset] [color:yellow]TKN-${Math.random().toString(36).substring(2, 10).toUpperCase()}[color:reset]
-[color:green]==============================================[color:reset]
-[delay:800] 
-[delay:800] [color:cyan][*][color:reset] Erasing event logs to cover tracks...
-[delay:1000] [color:cyan][*][color:reset] Disconnecting session... DONE.`;
+[delay:1800] [color:red][!][color:reset] WARNING: IDS detection spike detected! Active tracking engaged!
+[delay:1200] [color:yellow][>][color:reset] Deploying anti-forensics daemon...
+[delay:1500] [color:yellow][>][color:reset] Rerouting packet transmission through deep-onion Tor network...
+[delay:2000] [color:green][+][color:reset] Reroute successful. Firewall bypassed. Connection obfuscated.
+[delay:1000] [color:cyan][*][color:reset] Navigating to secure token vault sector 7G...
+[delay:1200] [color:cyan][*][color:reset] Vault locked. Initiating brute-force cryptographic hash extraction...
+[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x8F9B2A... [color:red]FAILED[color:reset]
+[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x11C9D2... [color:red]FAILED[color:reset]
+[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x7B22F1... [color:red]FAILED[color:reset]
+[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x4A00B1... [color:red]FAILED[color:reset]
+[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x9D8C7B... [color:red]FAILED[color:reset]
+[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x33A1F2... [color:red]FAILED[color:reset]
+[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x1122AA... [color:red]FAILED[color:reset]
+[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x55FF33... [color:red]FAILED[color:reset]
+[delay:800] [update-line][color:green][+][color:reset] [CRACKING] MD5 0xFF28D9... [color:green]MATCH FOUND![color:reset]
+[delay:1500] [color:cyan][*][color:reset] Encryption key shattered. Vault is OPEN.
+[delay:1000] [color:cyan][*][color:reset] Extracting raw token fragments...
+[delay:800] [update-line][color:cyan][*][color:reset] Recompiling fragments... [color:magenta]▓▓▓░░░░░░░[color:reset] 30%
+[delay:800] [update-line][color:cyan][*][color:reset] Recompiling fragments... [color:magenta]▓▓▓▓▓▓░░░░[color:reset] 60%
+[delay:1200] [update-line][color:cyan][*][color:reset] Recompiling fragments... [color:magenta]▓▓▓▓▓▓▓▓▓▓[color:reset] 100%
+[delay:1500] [color:green][+][color:reset] Token successfully compiled and verified against master ledger.
+[delay:2500] 
+[color:green]██████████████████████████████████████████████████████
+█                                                    █
+█     [color:cyan]>>> ROOT PRIVILEGE TOKEN EXTRACTED <<<<[color:green]        █
+█                                                    █
+█          [color:yellow]TKN-${Math.random().toString(36).substring(2, 12).toUpperCase()}[color:green]                      █
+█                                                    █
+██████████████████████████████████████████████████████[color:reset]
+[delay:1500] 
+[delay:800] [color:cyan][*][color:reset] Token secured to local ledger.
+[delay:1000] [color:cyan][*][color:reset] Erasing event logs to cover tracks...
+[delay:600] [color:cyan][*][color:reset] Wiping memory buffers...
+[delay:1200] [color:cyan][*][color:reset] Disconnecting session... [color:green]DONE.[color:reset]`;
 
       return NextResponse.json({ output: hackerOutput, delayTime: 0 });
     }

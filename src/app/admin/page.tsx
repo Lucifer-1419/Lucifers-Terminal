@@ -242,10 +242,10 @@ export default function AdminDashboard() {
             <div style={{ background: '#111', border: selectedUser.isRestricted ? '1px solid #ef2929' : '1px solid #222', borderRadius: '8px', padding: '32px', marginBottom: '24px', boxShadow: selectedUser.isRestricted ? '0 0 40px rgba(239,41,41,0.1)' : '0 4px 20px rgba(0,0,0,0.5)', position: 'relative', overflow: 'hidden' }}>
               {selectedUser.isRestricted && <div style={{ position: 'absolute', top: 0, right: 0, background: '#ef2929', color: 'white', padding: '4px 24px', fontSize: '10px', fontWeight: 'bold', transform: 'rotate(45deg) translate(20px, -20px)' }}>RESTRICTED</div>}
               
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '16px' }}>
                 <div>
                   <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>OPERATIVE ID</div>
-                  <h2 style={{ fontSize: '32px', color: 'white', margin: 0, display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <h2 style={{ fontSize: '32px', color: 'white', margin: 0, display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
                     {selectedUser.username}
                     {selectedUser.role === 'ADMIN' && <span style={{ background: '#ef2929', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>ADMIN</span>}
                   </h2>
@@ -253,13 +253,13 @@ export default function AdminDashboard() {
                 </div>
 
                 {selectedUser.role !== 'ADMIN' && (
-                  <div style={{ display: 'flex', gap: '12px' }}>
+                  <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                     <button 
                       onClick={() => { setRestrictUser(selectedUser); setRestrictMsg(selectedUser.restrictionMessage || ''); }}
                       style={{ display: 'flex', alignItems: 'center', gap: '8px', background: selectedUser.isRestricted ? 'rgba(74, 222, 128, 0.1)' : 'rgba(239, 41, 41, 0.1)', border: selectedUser.isRestricted ? '1px solid #4ade80' : '1px solid #ef2929', color: selectedUser.isRestricted ? '#4ade80' : '#ef2929', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}
                     >
                       {selectedUser.isRestricted ? <UserCheck size={16} /> : <UserX size={16} />} 
-                      {selectedUser.isRestricted ? 'Lift Hardware Restriction' : 'Impose Restriction'}
+                      {selectedUser.isRestricted ? 'Lift Restriction' : 'Impose Restriction'}
                     </button>
                     
                     <button 
@@ -347,7 +347,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Users Grid */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', alignContent: 'start' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '16px', alignContent: 'start' }}>
                 {users.map(u => (
                   <div 
                     key={u.id} 
@@ -385,23 +385,25 @@ export default function AdminDashboard() {
             <h2 className="admin-panel-title">
               <Activity color="#4ade80" /> Global Telemetry
             </h2>
-            <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px', overflowX: 'auto' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '120px 100px 150px 1fr', paddingBottom: '12px', borderBottom: '1px solid #222', color: '#888', fontSize: '12px', fontWeight: 'bold', marginBottom: '12px', minWidth: '600px' }}>
-                <div>TIMESTAMP</div>
-                <div>STATUS</div>
-                <div>OPERATIVE</div>
-                <div>COMMAND</div>
-              </div>
-              <div style={{ maxHeight: '600px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '600px' }}>
-                {logs.map(log => (
-                  <div key={log.id} style={{ display: 'grid', gridTemplateColumns: '120px 100px 150px 1fr', fontSize: '13px', alignItems: 'center', background: log.isSuccess ? 'rgba(74,222,128,0.02)' : 'rgba(239,41,41,0.02)', padding: '8px', borderRadius: '4px' }}>
-                    <span style={{ color: '#555' }}>{new Date(log.createdAt).toLocaleTimeString()}</span>
-                    <span style={{ color: log.isSuccess ? '#4ade80' : '#f87171', fontWeight: 'bold' }}>{log.isSuccess ? 'SUCCESS' : 'FAILED'}</span>
-                    <span style={{ color: '#ceaa61' }}>{log.user.username}</span>
-                    <span style={{ color: '#ddd', fontFamily: 'monospace' }}>{log.command}</span>
-                  </div>
-                ))}
-                {logs.length === 0 && <div style={{ color: '#555', textAlign: 'center', padding: '40px' }}>No telemetry data captured.</div>}
+            <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px' }}>
+              <div style={{ overflowX: 'auto' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '120px 100px 150px 1fr', paddingBottom: '12px', borderBottom: '1px solid #222', color: '#888', fontSize: '12px', fontWeight: 'bold', marginBottom: '12px', minWidth: '500px' }}>
+                  <div>TIMESTAMP</div>
+                  <div>STATUS</div>
+                  <div>OPERATIVE</div>
+                  <div>COMMAND</div>
+                </div>
+                <div style={{ maxHeight: '600px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px', minWidth: '500px' }}>
+                  {logs.map(log => (
+                    <div key={log.id} style={{ display: 'grid', gridTemplateColumns: '120px 100px 150px 1fr', fontSize: '13px', alignItems: 'center', background: log.isSuccess ? 'rgba(74,222,128,0.02)' : 'rgba(239,41,41,0.02)', padding: '8px', borderRadius: '4px' }}>
+                      <span style={{ color: '#555' }}>{new Date(log.createdAt).toLocaleTimeString()}</span>
+                      <span style={{ color: log.isSuccess ? '#4ade80' : '#f87171', fontWeight: 'bold' }}>{log.isSuccess ? 'SUCCESS' : 'FAILED'}</span>
+                      <span style={{ color: '#ceaa61' }}>{log.user.username}</span>
+                      <span style={{ color: '#ddd', fontFamily: 'monospace', wordBreak: 'break-all' }}>{log.command}</span>
+                    </div>
+                  ))}
+                  {logs.length === 0 && <div style={{ color: '#555', textAlign: 'center', padding: '40px' }}>No telemetry data captured.</div>}
+                </div>
               </div>
             </div>
           </div>
@@ -547,19 +549,25 @@ export default function AdminDashboard() {
 
         @media (max-width: 768px) {
           .admin-layout { flex-direction: column; }
-          .admin-sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #222; flex-direction: row; align-items: center; justify-content: space-between; padding: 10px 20px; }
-          .admin-sidebar-header { padding: 0; border: none; margin: 0; }
-          .admin-sidebar-nav { flex-direction: row; overflow-x: auto; flex: unset; margin-left: 20px; }
-          .admin-sidebar-nav button { white-space: nowrap; padding: 8px 12px; font-size: 12px; border-left: none !important; border-bottom: 3px solid transparent; }
-          .admin-sidebar-nav button[style*="border-left"] { border-bottom: 3px solid #ef2929 !important; }
+          .admin-sidebar { width: 100%; height: auto; border-right: none; border-bottom: 1px solid #222; flex-direction: column; align-items: stretch; padding: 0; }
+          .admin-sidebar-header { padding: 16px; border-bottom: 1px solid #222; margin: 0; display: flex; justify-content: center; }
+          .admin-sidebar-nav { flex-direction: row; overflow-x: auto; flex: unset; padding: 0; white-space: nowrap; }
+          .admin-sidebar-nav::-webkit-scrollbar { display: none; }
+          .admin-sidebar-nav button { flex: 0 0 auto; padding: 12px 16px; font-size: 13px; border-left: none !important; border-bottom: 3px solid transparent; width: auto; justify-content: center; }
+          .admin-sidebar-nav button[style*="border-left"] { border-bottom: 3px solid #ef2929 !important; background: linear-gradient(0deg, rgba(239, 41, 41, 0.15) 0%, transparent 100%) !important; }
           .admin-sidebar-footer { display: none; }
           
-          .admin-main { padding: 20px; }
-          .admin-kpi-grid { grid-template-columns: 1fr; gap: 16px; margin-bottom: 24px; }
-          .admin-content-grid { grid-template-columns: 1fr; }
-          .admin-content-grid-alt { grid-template-columns: 1fr; }
-          .admin-profile-stats { grid-template-columns: 1fr; }
+          .admin-main { padding: 16px; }
+          .admin-kpi-grid { grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+          .admin-kpi-grid > div { padding: 16px; }
+          .admin-content-grid { grid-template-columns: 1fr; gap: 16px; }
+          .admin-content-grid-alt { grid-template-columns: 1fr; gap: 24px; }
+          .admin-profile-stats { grid-template-columns: 1fr; gap: 16px; }
           .admin-panel-title { font-size: 20px; margin-bottom: 20px; }
+        }
+
+        @media (max-width: 480px) {
+          .admin-kpi-grid { grid-template-columns: 1fr; }
         }
 
         @keyframes fadeIn {
