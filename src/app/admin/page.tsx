@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { ShieldAlert, Trash2, Activity, UserX, UserCheck } from 'lucide-react';
+import { ShieldAlert, Trash2, Activity, UserX, UserCheck, LayoutDashboard, Users, TerminalSquare, Target, Cpu, Server, ArrowLeft } from 'lucide-react';
 
 type Command = { id: string; commandName: string; expectedOutput: string; delayTime: number };
 type User = { id: string; username: string; role: string; progress: number; tokens: number; tokenTarget: number; isRestricted: boolean; restrictionMessage: string | null; createdAt: string };
@@ -9,13 +9,16 @@ type Log = { id: string; command: string; isSuccess: boolean; user: { username: 
 type Task = { id: string; title: string; status: string; assignedTo: { username: string } };
 
 export default function AdminDashboard() {
-  const [tab, setTab] = useState<'users' | 'logs' | 'tasks' | 'commands'>('users');
+  const [tab, setTab] = useState<'overview' | 'users' | 'logs' | 'tasks' | 'commands'>('overview');
   
   // Data States
   const [commands, setCommands] = useState<Command[]>([]);
   const [users, setUsers] = useState<User[]>([]);
   const [logs, setLogs] = useState<Log[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
+
+  // Detailed View States
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
   // Form States
   const [cmdName, setCmdName] = useState('');
@@ -29,17 +32,16 @@ export default function AdminDashboard() {
   const [taskDesc, setTaskDesc] = useState('');
   const [taskUserId, setTaskUserId] = useState('');
 
-  // Filtering & Modals
-  const [logFilterUser, setLogFilterUser] = useState<string>('');
+  // Modals
   const [restrictUser, setRestrictUser] = useState<User | null>(null);
   const [restrictMsg, setRestrictMsg] = useState('');
 
   useEffect(() => {
-    if (tab === 'commands') fetchCommands();
-    if (tab === 'users') fetchUsers();
-    if (tab === 'logs') fetchLogs();
-    if (tab === 'tasks') { fetchTasks(); fetchUsers(); }
-  }, [tab]);
+    fetchUsers();
+    fetchLogs();
+    fetchTasks();
+    fetchCommands();
+  }, []);
 
   const fetchCommands = async () => { const res = await fetch('/api/admin/commands'); if(res.ok) setCommands(await res.json()); };
   const fetchUsers = async () => { const res = await fetch('/api/admin/users'); if(res.ok) setUsers(await res.json()); };
@@ -63,6 +65,10 @@ export default function AdminDashboard() {
       body: JSON.stringify({ userId, target })
     });
     fetchUsers();
+    // Update local selected user state if active
+    if (selectedUser?.id === userId) {
+      setSelectedUser(prev => prev ? { ...prev, tokenTarget: parseInt(target) } : null);
+    }
   };
 
   const handleCreateUser = async (e: React.FormEvent) => {
@@ -76,11 +82,12 @@ export default function AdminDashboard() {
   };
 
   const handleDeleteUser = async (userId: string) => {
-    if (confirm("Are you sure you want to permanently delete this user? All their logs and data will be lost.")) {
+    if (confirm("Are you sure you want to permanently delete this operative? All their logs and data will be lost.")) {
       await fetch('/api/admin/users', {
         method: 'DELETE', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId }),
       });
+      if (selectedUser?.id === userId) setSelectedUser(null);
       fetchUsers();
     }
   };
@@ -95,6 +102,15 @@ export default function AdminDashboard() {
         restrictionMessage: restrictUser.isRestricted ? null : (restrictMsg || "Your device is at limit of Token Generation, please consider upgrading the hardware")
       }),
     });
+    
+    // Update local states
+    const newStatus = !restrictUser.isRestricted;
+    const newMsg = restrictUser.isRestricted ? null : (restrictMsg || "Your device is at limit of Token Generation, please consider upgrading the hardware");
+    
+    if (selectedUser?.id === restrictUser.id) {
+      setSelectedUser(prev => prev ? { ...prev, isRestricted: newStatus, restrictionMessage: newMsg } : null);
+    }
+    
     setRestrictUser(null);
     fetchUsers();
   };
@@ -109,219 +125,378 @@ export default function AdminDashboard() {
     fetchTasks();
   };
 
-  const viewUserLogs = (username: string) => {
-    setLogFilterUser(username);
-    setTab('logs');
-  };
+  // KPI Calculations
+  const totalTokens = users.reduce((acc, user) => acc + user.tokens, 0);
+  const activeOperatives = users.filter(u => u.role !== 'ADMIN').length;
+  const restrictedOperatives = users.filter(u => u.isRestricted).length;
 
-  const filteredLogs = logFilterUser ? logs.filter(l => l.user.username === logFilterUser) : logs;
+  const NavItem = ({ id, icon: Icon, label }: { id: typeof tab, icon: any, label: string }) => (
+    <button 
+      onClick={() => { setTab(id); setSelectedUser(null); }}
+      style={{
+        display: 'flex', alignItems: 'center', gap: '12px', width: '100%', padding: '12px 16px',
+        background: tab === id && !selectedUser ? 'linear-gradient(90deg, rgba(239, 41, 41, 0.15) 0%, transparent 100%)' : 'transparent',
+        borderLeft: tab === id && !selectedUser ? '3px solid #ef2929' : '3px solid transparent',
+        color: tab === id && !selectedUser ? 'white' : '#888',
+        cursor: 'pointer', textAlign: 'left', transition: 'all 0.2s', fontSize: '14px', fontWeight: tab === id && !selectedUser ? 'bold' : 'normal'
+      }}
+    >
+      <Icon size={18} color={tab === id && !selectedUser ? '#ef2929' : '#888'} />
+      {label}
+    </button>
+  );
 
   return (
-    <div>
-      {/* Tabs */}
-      <div style={{ display: 'flex', gap: '8px', marginBottom: '24px', borderBottom: '1px solid rgba(239, 41, 41, 0.3)', paddingBottom: '16px' }}>
-        {['users', 'logs', 'tasks', 'commands'].map(t => (
-          <button 
-            key={t}
-            onClick={() => setTab(t as any)}
-            style={{ 
-              background: tab === t ? 'rgba(239, 41, 41, 0.1)' : 'transparent', 
-              color: tab === t ? '#ef2929' : '#888',
-              border: tab === t ? '1px solid #ef2929' : '1px solid #333', 
-              padding: '8px 24px', borderRadius: '4px', textTransform: 'capitalize', cursor: 'pointer',
-              fontWeight: tab === t ? 'bold' : 'normal', transition: 'all 0.2s'
-            }}
-          >
-            {t}
-          </button>
-        ))}
+    <div style={{ display: 'flex', height: '100vh', background: '#050505', color: '#fff', fontFamily: 'monospace' }}>
+      
+      {/* Sidebar Navigation */}
+      <div style={{ width: '260px', borderRight: '1px solid #222', display: 'flex', flexDirection: 'column', background: '#0a0a0a' }}>
+        <div style={{ padding: '24px', borderBottom: '1px solid #222', marginBottom: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <Server color="#ef2929" size={24} />
+            <div>
+              <h1 style={{ fontSize: '16px', fontWeight: 'bold', margin: 0, letterSpacing: '1px' }}>LUCIFER CORE</h1>
+              <div style={{ fontSize: '10px', color: '#ceaa61', marginTop: '4px' }}>ADMINISTRATION PANEL</div>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+          <NavItem id="overview" icon={LayoutDashboard} label="Global Overview" />
+          <NavItem id="users" icon={Users} label="Operative Network" />
+          <NavItem id="logs" icon={Activity} label="Global Telemetry" />
+          <NavItem id="tasks" icon={Target} label="Mission Control" />
+          <NavItem id="commands" icon={TerminalSquare} label="Command Logic" />
+        </div>
+
+        <div style={{ padding: '24px', borderTop: '1px solid #222', fontSize: '10px', color: '#555' }}>
+          SYSTEM STATUS: ONLINE<br/>
+          ENCRYPTION: AES-256
+        </div>
       </div>
 
-      {/* Users Tab */}
-      {tab === 'users' && (
-        <div className="admin-grid">
-          <div className="admin-panel">
-            <h2 className="admin-panel-title">Deploy Operative</h2>
-            <form onSubmit={handleCreateUser} className="admin-form">
-              <div className="admin-form-group">
-                <label className="admin-label">System ID (Username)</label>
-                <input type="text" value={newUsername} onChange={e => setNewUsername(e.target.value)} className="admin-input" required />
-              </div>
-              <div className="admin-form-group">
-                <label className="admin-label">Passphrase</label>
-                <input type="text" value={newPassword} onChange={e => setNewPassword(e.target.value)} className="admin-input" required />
-              </div>
-              <button type="submit" className="admin-btn" style={{ background: '#ef2929', borderColor: '#ef2929' }}>Create User</button>
-            </form>
-          </div>
-          
-          <div className="admin-panel">
-            <h2 className="admin-panel-title">Active Operatives</h2>
-            <div className="admin-list" style={{ gap: '12px' }}>
-              {users.map(u => (
-                <div key={u.id} className="admin-list-item" style={{ display: 'flex', flexDirection: 'column', gap: '12px', border: u.isRestricted ? '1px solid rgba(239,41,41,0.5)' : '1px solid #333', background: u.isRestricted ? 'rgba(239,41,41,0.05)' : 'rgba(0,0,0,0.3)' }}>
-                  
-                  {/* Top Row: User Info & Core Stats */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ color: 'white', fontWeight: 'bold', fontSize: '16px' }}>{u.username}</span>
-                      {u.role === 'ADMIN' && <span style={{ background: '#ef2929', color: 'white', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold' }}>ADMIN</span>}
-                      {u.isRestricted && <span style={{ background: 'rgba(239,41,41,0.2)', color: '#ef2929', padding: '2px 6px', borderRadius: '4px', fontSize: '10px', fontWeight: 'bold', border: '1px solid #ef2929' }}>RESTRICTED</span>}
+      {/* Main Content Area */}
+      <div style={{ flex: 1, overflowY: 'auto', padding: '40px', background: 'radial-gradient(circle at top right, #110505 0%, #050505 100%)' }}>
+        
+        {/* OVERVIEW TAB */}
+        {tab === 'overview' && !selectedUser && (
+          <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+            <h2 style={{ fontSize: '24px', marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Cpu color="#ceaa61" /> System Overview
+            </h2>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px', marginBottom: '40px' }}>
+              {[
+                { label: 'Total Tokens Mined', value: totalTokens, color: '#ceaa61' },
+                { label: 'Active Operatives', value: activeOperatives, color: '#4ade80' },
+                { label: 'Restricted Systems', value: restrictedOperatives, color: '#ef2929' },
+                { label: 'Total Telemetry Logs', value: logs.length, color: '#60a5fa' },
+              ].map((kpi, i) => (
+                <div key={i} style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px', boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
+                  <div style={{ fontSize: '12px', color: '#888', marginBottom: '8px' }}>{kpi.label}</div>
+                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: kpi.color }}>{kpi.value}</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+              <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px' }}>
+                <h3 style={{ fontSize: '14px', color: '#888', marginBottom: '16px', borderBottom: '1px solid #222', paddingBottom: '8px' }}>Recent Telemetry</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  {logs.slice(0, 5).map(log => (
+                    <div key={log.id} style={{ fontSize: '12px', display: 'flex', justifyContent: 'space-between' }}>
+                      <span style={{ color: '#555' }}>[{new Date(log.createdAt).toLocaleTimeString()}]</span>
+                      <span style={{ color: '#ceaa61', flex: 1, margin: '0 12px' }}>{log.user.username}</span>
+                      <span style={{ color: log.isSuccess ? '#4ade80' : '#f87171' }}>{log.command}</span>
                     </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px' }}>
+                <h3 style={{ fontSize: '14px', color: '#888', marginBottom: '16px', borderBottom: '1px solid #222', paddingBottom: '8px' }}>Active Missions</h3>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {tasks.slice(0, 5).map(t => (
+                    <div key={t.id} style={{ fontSize: '12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ color: 'white' }}>{t.title}</span>
+                      <span style={{ background: t.status === 'COMPLETED' ? 'rgba(74,222,128,0.1)' : 'rgba(252,233,79,0.1)', color: t.status === 'COMPLETED' ? '#4ade80' : '#fce94f', padding: '2px 8px', borderRadius: '4px' }}>{t.status}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* OPERATIVE PROFILE VIEW */}
+        {selectedUser && (
+          <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+            <button 
+              onClick={() => setSelectedUser(null)}
+              style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', border: 'none', color: '#888', cursor: 'pointer', marginBottom: '24px', fontSize: '14px' }}
+            >
+              <ArrowLeft size={16} /> Back to Network
+            </button>
+
+            {/* Profile Header Card */}
+            <div style={{ background: '#111', border: selectedUser.isRestricted ? '1px solid #ef2929' : '1px solid #222', borderRadius: '8px', padding: '32px', marginBottom: '24px', boxShadow: selectedUser.isRestricted ? '0 0 40px rgba(239,41,41,0.1)' : '0 4px 20px rgba(0,0,0,0.5)', position: 'relative', overflow: 'hidden' }}>
+              {selectedUser.isRestricted && <div style={{ position: 'absolute', top: 0, right: 0, background: '#ef2929', color: 'white', padding: '4px 24px', fontSize: '10px', fontWeight: 'bold', transform: 'rotate(45deg) translate(20px, -20px)' }}>RESTRICTED</div>}
+              
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div>
+                  <div style={{ fontSize: '12px', color: '#888', marginBottom: '4px' }}>OPERATIVE ID</div>
+                  <h2 style={{ fontSize: '32px', color: 'white', margin: 0, display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    {selectedUser.username}
+                    {selectedUser.role === 'ADMIN' && <span style={{ background: '#ef2929', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>ADMIN</span>}
+                  </h2>
+                  <div style={{ fontSize: '12px', color: '#555', marginTop: '8px' }}>Deployed: {new Date(selectedUser.createdAt).toLocaleDateString()}</div>
+                </div>
+
+                {selectedUser.role !== 'ADMIN' && (
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <button 
+                      onClick={() => { setRestrictUser(selectedUser); setRestrictMsg(selectedUser.restrictionMessage || ''); }}
+                      style={{ display: 'flex', alignItems: 'center', gap: '8px', background: selectedUser.isRestricted ? 'rgba(74, 222, 128, 0.1)' : 'rgba(239, 41, 41, 0.1)', border: selectedUser.isRestricted ? '1px solid #4ade80' : '1px solid #ef2929', color: selectedUser.isRestricted ? '#4ade80' : '#ef2929', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', fontSize: '14px', fontWeight: 'bold' }}
+                    >
+                      {selectedUser.isRestricted ? <UserCheck size={16} /> : <UserX size={16} />} 
+                      {selectedUser.isRestricted ? 'Lift Hardware Restriction' : 'Impose Restriction'}
+                    </button>
                     
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                      <span style={{ color: '#888', fontSize: '12px' }}>Yield: <strong style={{ color: '#ceaa61', fontSize: '14px' }}>{u.tokens}</strong></span>
-                      {u.role !== 'ADMIN' && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <span style={{ color: '#888', fontSize: '12px' }}>Target:</span>
-                          <input 
-                            type="number" 
-                            defaultValue={u.tokenTarget} 
-                            onBlur={(e) => handleTargetUpdate(u.id, e.target.value)}
-                            className="admin-input" 
-                            style={{ width: '60px', padding: '4px 6px', fontSize: '12px', background: '#000' }} 
-                          />
-                        </div>
-                      )}
+                    <button 
+                      onClick={() => handleDeleteUser(selectedUser.id)}
+                      style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', border: '1px solid #555', color: '#888', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', fontSize: '14px' }}
+                    >
+                      <Trash2 size={16} /> Terminate
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Stats Row */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginTop: '32px', paddingTop: '32px', borderTop: '1px solid #222' }}>
+                <div>
+                  <div style={{ fontSize: '12px', color: '#888', marginBottom: '8px' }}>Tokens Mined</div>
+                  <div style={{ fontSize: '28px', color: '#ceaa61', fontWeight: 'bold' }}>{selectedUser.tokens}</div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '12px', color: '#888', marginBottom: '8px' }}>Mission Progress</div>
+                  <div style={{ fontSize: '28px', color: '#60a5fa', fontWeight: 'bold' }}>{selectedUser.progress}%</div>
+                </div>
+                {selectedUser.role !== 'ADMIN' && (
+                  <div>
+                    <div style={{ fontSize: '12px', color: '#888', marginBottom: '8px' }}>Extraction Target</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <input 
+                        type="number" 
+                        defaultValue={selectedUser.tokenTarget} 
+                        onBlur={(e) => handleTargetUpdate(selectedUser.id, e.target.value)}
+                        style={{ width: '80px', padding: '8px', background: '#000', border: '1px solid #333', color: 'white', borderRadius: '4px', fontSize: '20px', fontWeight: 'bold' }} 
+                      />
                     </div>
                   </div>
+                )}
+              </div>
+            </div>
 
-                  {/* Bottom Row: Actions */}
-                  {u.role !== 'ADMIN' && (
-                    <div style={{ display: 'flex', gap: '8px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '12px' }}>
-                      <button onClick={() => viewUserLogs(u.username)} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', background: 'transparent', border: '1px solid #555', color: '#ccc', padding: '6px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
-                        <Activity size={14} /> Telemetry
-                      </button>
-                      
-                      <button onClick={() => { setRestrictUser(u); setRestrictMsg(u.restrictionMessage || ''); }} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', background: u.isRestricted ? 'rgba(74, 222, 128, 0.1)' : 'rgba(239, 41, 41, 0.1)', border: u.isRestricted ? '1px solid #4ade80' : '1px solid #ef2929', color: u.isRestricted ? '#4ade80' : '#ef2929', padding: '6px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
-                        {u.isRestricted ? <UserCheck size={14} /> : <UserX size={14} />} 
-                        {u.isRestricted ? 'Lift Restriction' : 'Restrict'}
-                      </button>
-                      
-                      <button onClick={() => handleDeleteUser(u.id)} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'transparent', border: '1px solid #555', color: '#888', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer' }}>
-                        <Trash2 size={14} />
-                      </button>
+            {/* Profile Specific Telemetry */}
+            <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px' }}>
+              <h3 style={{ fontSize: '16px', color: 'white', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Activity size={18} color="#60a5fa" /> Operative Telemetry
+              </h3>
+              <div style={{ maxHeight: '400px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '4px', background: '#050505', padding: '16px', borderRadius: '4px', border: '1px solid #1a1a1a' }}>
+                {logs.filter(l => l.user.username === selectedUser.username).length === 0 ? (
+                  <div style={{ color: '#555', textAlign: 'center', padding: '20px' }}>No command history found.</div>
+                ) : (
+                  logs.filter(l => l.user.username === selectedUser.username).map(log => (
+                    <div key={log.id} style={{ fontSize: '13px', display: 'flex', gap: '16px' }}>
+                      <span style={{ color: '#555', minWidth: '80px' }}>{new Date(log.createdAt).toLocaleTimeString()}</span>
+                      <span style={{ color: log.isSuccess ? '#4ade80' : '#f87171', minWidth: '60px' }}>{log.isSuccess ? '[OK]' : '[FAIL]'}</span>
+                      <span style={{ color: '#ddd' }}>{log.command}</span>
                     </div>
-                  )}
-
-                </div>
-              ))}
+                  ))
+                )}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Logs Tab */}
-      {tab === 'logs' && (
-        <div className="admin-panel">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
-            <h2 className="admin-panel-title" style={{ marginBottom: 0 }}>
-              {logFilterUser ? `Telemetry: ${logFilterUser}` : 'Global Real-Time Telemetry'}
+        {/* USERS NETWORK TAB */}
+        {tab === 'users' && !selectedUser && (
+          <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '32px' }}>
+              <h2 style={{ fontSize: '24px', margin: 0, display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <Users color="#60a5fa" /> Operative Network
+              </h2>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 3fr', gap: '32px' }}>
+              {/* Create User Form */}
+              <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px', height: 'fit-content' }}>
+                <h3 style={{ fontSize: '14px', color: '#888', marginBottom: '16px', borderBottom: '1px solid #222', paddingBottom: '8px' }}>Deploy New Operative</h3>
+                <form onSubmit={handleCreateUser} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', color: '#666', marginBottom: '4px' }}>System ID</label>
+                    <input type="text" value={newUsername} onChange={e => setNewUsername(e.target.value)} style={{ width: '100%', padding: '10px', background: '#000', border: '1px solid #333', color: 'white', borderRadius: '4px' }} required />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', color: '#666', marginBottom: '4px' }}>Passphrase</label>
+                    <input type="text" value={newPassword} onChange={e => setNewPassword(e.target.value)} style={{ width: '100%', padding: '10px', background: '#000', border: '1px solid #333', color: 'white', borderRadius: '4px' }} required />
+                  </div>
+                  <button type="submit" style={{ background: '#ef2929', color: 'white', border: 'none', padding: '10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', marginTop: '8px' }}>Initialize Operative</button>
+                </form>
+              </div>
+
+              {/* Users Grid */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '16px', alignContent: 'start' }}>
+                {users.map(u => (
+                  <div 
+                    key={u.id} 
+                    onClick={() => setSelectedUser(u)}
+                    style={{ 
+                      background: u.isRestricted ? 'rgba(239,41,41,0.05)' : '#111', 
+                      border: u.isRestricted ? '1px solid rgba(239,41,41,0.3)' : '1px solid #222', 
+                      borderRadius: '8px', padding: '20px', cursor: 'pointer', transition: 'all 0.2s',
+                      boxShadow: '0 4px 10px rgba(0,0,0,0.3)'
+                    }}
+                    onMouseOver={(e) => e.currentTarget.style.borderColor = u.isRestricted ? '#ef2929' : '#60a5fa'}
+                    onMouseOut={(e) => e.currentTarget.style.borderColor = u.isRestricted ? 'rgba(239,41,41,0.3)' : '#222'}
+                  >
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px' }}>
+                      <div>
+                        <div style={{ fontSize: '16px', color: 'white', fontWeight: 'bold' }}>{u.username}</div>
+                        <div style={{ fontSize: '11px', color: '#555', marginTop: '4px' }}>{u.role}</div>
+                      </div>
+                      {u.isRestricted && <ShieldAlert size={16} color="#ef2929" />}
+                    </div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px' }}>
+                      <span style={{ color: '#888' }}>Tokens: <span style={{ color: '#ceaa61', fontWeight: 'bold' }}>{u.tokens}</span></span>
+                      <span style={{ color: '#888' }}>Progress: <span style={{ color: '#60a5fa', fontWeight: 'bold' }}>{u.progress}%</span></span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* GLOBAL TELEMETRY TAB */}
+        {tab === 'logs' && !selectedUser && (
+          <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+            <h2 style={{ fontSize: '24px', marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Activity color="#4ade80" /> Global Telemetry
             </h2>
-            {logFilterUser && (
-              <button onClick={() => setLogFilterUser('')} style={{ background: 'transparent', border: '1px solid #555', color: '#ccc', padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontSize: '12px' }}>
-                Clear Filter
-              </button>
-            )}
-          </div>
-          
-          <div className="admin-list">
-            {filteredLogs.map(log => (
-              <div key={log.id} style={{ border: '1px solid #333', padding: '12px', display: 'flex', justifyContent: 'space-between', background: log.isSuccess ? 'rgba(0,255,0,0.02)' : 'rgba(255,0,0,0.02)' }}>
-                <div>
-                  <span style={{ color: '#555' }}>[{new Date(log.createdAt).toLocaleTimeString()}]</span> 
-                  <strong style={{ color: '#ceaa61', marginLeft: '12px', width: '100px', display: 'inline-block' }}>{log.user.username}</strong>
-                  <span style={{ color: '#333', margin: '0 8px' }}>|</span>
-                  <code style={{ color: log.isSuccess ? '#4ade80' : '#f87171' }}>{log.command}</code>
-                </div>
-                <div style={{ color: log.isSuccess ? '#4ade80' : '#f87171', fontSize: '12px', fontWeight: 'bold' }}>
-                  {log.isSuccess ? 'SUCCESS' : 'NOT FOUND'}
-                </div>
+            <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '120px 100px 150px 1fr', paddingBottom: '12px', borderBottom: '1px solid #222', color: '#888', fontSize: '12px', fontWeight: 'bold', marginBottom: '12px' }}>
+                <div>TIMESTAMP</div>
+                <div>STATUS</div>
+                <div>OPERATIVE</div>
+                <div>COMMAND</div>
               </div>
-            ))}
-            {filteredLogs.length === 0 && <div style={{ color: '#888', textAlign: 'center', padding: '24px' }}>No telemetry data found.</div>}
-          </div>
-        </div>
-      )}
-
-      {/* Tasks Tab */}
-      {tab === 'tasks' && (
-        <div className="admin-grid">
-          <div className="admin-panel">
-            <h2 className="admin-panel-title">Assign Mission</h2>
-            <form onSubmit={handleCreateTask} className="admin-form">
-              <div className="admin-form-group">
-                <label className="admin-label">Target Operative</label>
-                <select value={taskUserId} onChange={e => setTaskUserId(e.target.value)} className="admin-input" required>
-                  <option value="">Select an operative...</option>
-                  {users.map(u => <option key={u.id} value={u.id}>{u.username}</option>)}
-                </select>
+              <div style={{ maxHeight: '600px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                {logs.map(log => (
+                  <div key={log.id} style={{ display: 'grid', gridTemplateColumns: '120px 100px 150px 1fr', fontSize: '13px', alignItems: 'center', background: log.isSuccess ? 'rgba(74,222,128,0.02)' : 'rgba(239,41,41,0.02)', padding: '8px', borderRadius: '4px' }}>
+                    <span style={{ color: '#555' }}>{new Date(log.createdAt).toLocaleTimeString()}</span>
+                    <span style={{ color: log.isSuccess ? '#4ade80' : '#f87171', fontWeight: 'bold' }}>{log.isSuccess ? 'SUCCESS' : 'FAILED'}</span>
+                    <span style={{ color: '#ceaa61' }}>{log.user.username}</span>
+                    <span style={{ color: '#ddd', fontFamily: 'monospace' }}>{log.command}</span>
+                  </div>
+                ))}
+                {logs.length === 0 && <div style={{ color: '#555', textAlign: 'center', padding: '40px' }}>No telemetry data captured.</div>}
               </div>
-              <div className="admin-form-group">
-                <label className="admin-label">Mission Briefing</label>
-                <input type="text" value={taskTitle} onChange={e => setTaskTitle(e.target.value)} className="admin-input" required />
-              </div>
-              <button type="submit" className="admin-btn">Dispatch Mission</button>
-            </form>
-          </div>
-          <div className="admin-panel">
-            <h2 className="admin-panel-title">Active Missions</h2>
-            <div className="admin-list">
-              {tasks.map(t => (
-                <div key={t.id} className="admin-list-item">
-                  <div style={{ color: 'white', fontWeight: 'bold' }}>{t.title}</div>
-                  <div style={{ color: '#888', fontSize: '12px', marginTop: '4px' }}>Operative: <span style={{ color: '#ceaa61' }}>{t.assignedTo.username}</span> | Status: <span style={{ color: t.status === 'COMPLETED' ? '#4ade80' : '#fce94f' }}>{t.status}</span></div>
-                </div>
-              ))}
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Commands Tab */}
-      {tab === 'commands' && (
-        <div className="admin-grid">
-          <div className="admin-panel">
-            <h2 className="admin-panel-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
-              Create Custom Command
-              <a href="/commands_reference.txt" target="_blank" style={{ fontSize: '14px', color: '#ceaa61', textDecoration: 'underline' }}>View Built-in Cheat Sheet</a>
+        {/* MISSIONS TAB */}
+        {tab === 'tasks' && !selectedUser && (
+          <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+            <h2 style={{ fontSize: '24px', marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Target color="#ceaa61" /> Mission Control
             </h2>
-            <p style={{ color: '#888', fontSize: '12px', marginBottom: '16px' }}>Tip: Use <code>[delay:ms]</code> for streaming output. Example:<br/><code>[delay:500] Fetching...<br/>[delay:1000] Done.</code></p>
-            <form onSubmit={handleSaveCmd} className="admin-form">
-              <div className="admin-form-group">
-                <label className="admin-label">Command Trigger</label>
-                <input type="text" value={cmdName} onChange={e => setCmdName(e.target.value)} className="admin-input" placeholder="e.g. apt-get update" required />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '32px' }}>
+              <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px', height: 'fit-content' }}>
+                <h3 style={{ fontSize: '14px', color: '#888', marginBottom: '16px', borderBottom: '1px solid #222', paddingBottom: '8px' }}>Assign New Mission</h3>
+                <form onSubmit={handleCreateTask} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', color: '#666', marginBottom: '4px' }}>Target Operative</label>
+                    <select value={taskUserId} onChange={e => setTaskUserId(e.target.value)} style={{ width: '100%', padding: '10px', background: '#000', border: '1px solid #333', color: 'white', borderRadius: '4px' }} required>
+                      <option value="">Select an operative...</option>
+                      {users.filter(u => u.role !== 'ADMIN').map(u => <option key={u.id} value={u.id}>{u.username}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', color: '#666', marginBottom: '4px' }}>Mission Briefing</label>
+                    <input type="text" value={taskTitle} onChange={e => setTaskTitle(e.target.value)} style={{ width: '100%', padding: '10px', background: '#000', border: '1px solid #333', color: 'white', borderRadius: '4px' }} required />
+                  </div>
+                  <button type="submit" style={{ background: '#ceaa61', color: 'black', border: 'none', padding: '10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', marginTop: '8px' }}>Dispatch Mission</button>
+                </form>
               </div>
-              <div className="admin-form-group">
-                <label className="admin-label">Command Output</label>
-                <textarea value={output} onChange={e => setOutput(e.target.value)} className="admin-textarea" placeholder="[delay:500] Hit:1 http://kali.download..." required />
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {tasks.map(t => (
+                  <div key={t.id} style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <div style={{ fontSize: '16px', color: 'white', fontWeight: 'bold', marginBottom: '6px' }}>{t.title}</div>
+                      <div style={{ fontSize: '12px', color: '#888' }}>Operative: <span style={{ color: '#ceaa61' }}>{t.assignedTo.username}</span></div>
+                    </div>
+                    <span style={{ background: t.status === 'COMPLETED' ? 'rgba(74,222,128,0.1)' : 'rgba(252,233,79,0.1)', color: t.status === 'COMPLETED' ? '#4ade80' : '#fce94f', padding: '4px 12px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>{t.status}</span>
+                  </div>
+                ))}
               </div>
-              <div className="admin-form-group">
-                <label className="admin-label">Initial Processing Delay (ms)</label>
-                <input type="number" value={delay} onChange={e => setDelay(Number(e.target.value))} className="admin-input" required />
-              </div>
-              <button type="submit" className="admin-btn">Save Command</button>
-            </form>
-          </div>
-          <div className="admin-panel">
-            <h2 className="admin-panel-title">Active Custom Commands</h2>
-            <div className="admin-list">
-              {commands.map(cmd => (
-                <div key={cmd.id} className="admin-list-item">
-                  <div className="admin-list-title">{cmd.commandName} <span className="admin-list-delay">{cmd.delayTime}ms</span></div>
-                  <div className="admin-list-output">{cmd.expectedOutput}</div>
-                </div>
-              ))}
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Restriction Modal */}
+        {/* CUSTOM COMMANDS TAB */}
+        {tab === 'commands' && !selectedUser && (
+          <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+            <h2 style={{ fontSize: '24px', marginBottom: '32px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <TerminalSquare color="#f87171" /> Command Logic Core
+            </h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '32px' }}>
+              <div style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '24px', height: 'fit-content' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', borderBottom: '1px solid #222', paddingBottom: '8px' }}>
+                  <h3 style={{ fontSize: '14px', color: '#888', margin: 0 }}>Register Command</h3>
+                  <a href="/commands_reference.txt" target="_blank" style={{ fontSize: '12px', color: '#ceaa61', textDecoration: 'none' }}>Reference Guide ↗</a>
+                </div>
+                <form onSubmit={handleSaveCmd} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', color: '#666', marginBottom: '4px' }}>Trigger Sequence</label>
+                    <input type="text" value={cmdName} onChange={e => setCmdName(e.target.value)} style={{ width: '100%', padding: '10px', background: '#000', border: '1px solid #333', color: 'white', borderRadius: '4px', fontFamily: 'monospace' }} placeholder="e.g. nmap" required />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', color: '#666', marginBottom: '4px' }}>Payload Output</label>
+                    <textarea value={output} onChange={e => setOutput(e.target.value)} style={{ width: '100%', minHeight: '100px', padding: '10px', background: '#000', border: '1px solid #333', color: 'white', borderRadius: '4px', fontFamily: 'monospace', fontSize: '12px' }} placeholder="[delay:500] Scanning..." required />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '12px', color: '#666', marginBottom: '4px' }}>Init Delay (ms)</label>
+                    <input type="number" value={delay} onChange={e => setDelay(Number(e.target.value))} style={{ width: '100%', padding: '10px', background: '#000', border: '1px solid #333', color: 'white', borderRadius: '4px' }} required />
+                  </div>
+                  <button type="submit" style={{ background: '#f87171', color: 'black', border: 'none', padding: '10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', marginTop: '8px' }}>Inject Logic</button>
+                </form>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                {commands.map(cmd => (
+                  <div key={cmd.id} style={{ background: '#111', border: '1px solid #222', borderRadius: '8px', padding: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                      <span style={{ fontSize: '16px', color: '#f87171', fontWeight: 'bold', fontFamily: 'monospace' }}>{cmd.commandName}</span>
+                      <span style={{ color: '#555', fontSize: '12px' }}>{cmd.delayTime}ms delay</span>
+                    </div>
+                    <div style={{ background: '#000', padding: '12px', borderRadius: '4px', border: '1px solid #1a1a1a', color: '#ddd', fontSize: '12px', fontFamily: 'monospace', whiteSpace: 'pre-wrap' }}>
+                      {cmd.expectedOutput}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Global Modals */}
       {restrictUser && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.8)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ background: '#111', border: '1px solid #333', borderRadius: '8px', padding: '32px', width: '400px', boxShadow: '0 10px 40px rgba(0,0,0,1)' }}>
-            <h3 style={{ color: restrictUser.isRestricted ? '#4ade80' : '#ef2929', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <h3 style={{ color: restrictUser.isRestricted ? '#4ade80' : '#ef2929', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px', marginTop: 0 }}>
               <ShieldAlert size={20} /> 
               {restrictUser.isRestricted ? 'Lift Hardware Restriction?' : 'Impose Hardware Restriction'}
             </h3>
@@ -332,34 +507,33 @@ export default function AdminDashboard() {
                 <textarea 
                   value={restrictMsg} 
                   onChange={(e) => setRestrictMsg(e.target.value)}
-                  className="admin-textarea" 
-                  style={{ width: '100%', minHeight: '80px', fontSize: '12px' }}
+                  style={{ width: '100%', minHeight: '80px', padding: '12px', background: '#000', border: '1px solid #333', color: 'white', borderRadius: '4px', fontSize: '12px', fontFamily: 'monospace' }}
                   placeholder="Your device is at limit of Token Generation, please consider upgrading the hardware"
                 />
               </div>
             ) : (
               <p style={{ color: '#aaa', fontSize: '14px', marginBottom: '24px' }}>
-                This will lift the restriction on <strong>{restrictUser.username}</strong>, allowing them to generate tokens again.
+                This will lift the restriction on <strong>{restrictUser.username}</strong>, allowing them to extract tokens again.
               </p>
             )}
 
             <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
-              <button 
-                onClick={() => setRestrictUser(null)}
-                style={{ background: 'transparent', color: '#888', border: '1px solid #555', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}
-              >
-                Cancel
-              </button>
-              <button 
-                onClick={handleSaveRestriction}
-                style={{ background: restrictUser.isRestricted ? '#4ade80' : '#ef2929', color: restrictUser.isRestricted ? '#000' : '#fff', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}
-              >
+              <button onClick={() => setRestrictUser(null)} style={{ background: 'transparent', color: '#888', border: '1px solid #555', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
+              <button onClick={handleSaveRestriction} style={{ background: restrictUser.isRestricted ? '#4ade80' : '#ef2929', color: restrictUser.isRestricted ? '#000' : '#fff', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold' }}>
                 {restrictUser.isRestricted ? 'Confirm Lift' : 'Confirm Restriction'}
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Basic Keyframes for smooth tab switching */}
+      <style dangerouslySetInnerHTML={{__html: `
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}} />
     </div>
   );
 }
