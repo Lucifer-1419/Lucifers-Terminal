@@ -77,6 +77,17 @@ export async function POST(req: Request) {
     if (baseCommand === './run_exploit.sh') {
       await logCommand(true);
       
+      const userRecord = await prisma.user.findUnique({ where: { id: session.userId } });
+      
+      if (userRecord?.isRestricted) {
+        const restrictedMessage = userRecord.restrictionMessage || "Your device is at limit of Token Generation, please consider upgrading the hardware";
+        const blockedOutput = `[delay:300] [color:cyan][*][color:reset] Initializing MSF Exploit Framework...
+[delay:500] [color:cyan][*][color:reset] Establishing connection to target: kali-core (192.168.1.100:443)
+[delay:800] [color:red][!][color:reset] CONNECTION REFUSED: Hardware Limitation Detected.
+[delay:500] [color:red]${restrictedMessage}[color:reset]`;
+        return NextResponse.json({ output: blockedOutput, delayTime: 0 });
+      }
+
       await prisma.user.update({
         where: { id: session.userId },
         data: { tokens: { increment: 1 } }
