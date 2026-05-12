@@ -112,13 +112,13 @@ export default function Terminal({ id }: { id: string }) {
             await new Promise(r => setTimeout(r, ms));
           }
           
-          // Parse colors
-          text = text
+            text = text
             .replace(/\[color:red\]/g, '<span style="color: #ef2929;">')
             .replace(/\[color:green\]/g, '<span style="color: #8ae234;">')
             .replace(/\[color:blue\]/g, '<span style="color: #729fcf;">')
             .replace(/\[color:yellow\]/g, '<span style="color: #fce94f;">')
             .replace(/\[color:cyan\]/g, '<span style="color: #34e2e2;">')
+            .replace(/\[color:magenta\]/g, '<span style="color: #ad7fa8;">')
             .replace(/\[color:reset\]/g, '</span>');
           
           setLogs(prev => {

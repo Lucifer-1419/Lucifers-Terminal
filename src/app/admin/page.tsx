@@ -536,7 +536,7 @@ export default function AdminDashboard() {
         .admin-sidebar-header { padding: 24px; border-bottom: 1px solid #222; margin-bottom: 16px; }
         .admin-sidebar-nav { flex: 1; display: flex; flex-direction: column; gap: 4px; overflow-y: auto; overflow-x: hidden; }
         .admin-sidebar-footer { padding: 24px; border-top: 1px solid #222; font-size: 10px; color: #555; }
-        .admin-main { flex: 1; overflow-y: auto; padding: 40px; background: radial-gradient(circle at top right, #110505 0%, #050505 100%); }
+        .admin-main { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 40px; background: radial-gradient(circle at top right, #110505 0%, #050505 100%); }
         .admin-panel-title { font-size: 24px; margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
         .admin-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 40px; }
         .admin-content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
@@ -557,13 +557,13 @@ export default function AdminDashboard() {
           .admin-sidebar-nav button[style*="border-left"] { border-bottom: 3px solid #ef2929 !important; background: linear-gradient(0deg, rgba(239, 41, 41, 0.15) 0%, transparent 100%) !important; }
           .admin-sidebar-footer { display: none; }
           
-          .admin-main { padding: 16px; }
+          .admin-main { padding: 16px; width: 100vw; max-width: 100vw; box-sizing: border-box; }
           .admin-kpi-grid { grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
           .admin-kpi-grid > div { padding: 16px; }
-          .admin-content-grid { grid-template-columns: 1fr; gap: 16px; }
-          .admin-content-grid-alt { grid-template-columns: 1fr; gap: 24px; }
+          .admin-content-grid { grid-template-columns: 1fr; gap: 16px; width: 100%; }
+          .admin-content-grid-alt { grid-template-columns: 1fr; gap: 24px; width: 100%; }
           .admin-profile-stats { grid-template-columns: 1fr; gap: 16px; }
-          .admin-panel-title { font-size: 20px; margin-bottom: 20px; }
+          .admin-panel-title { font-size: 20px; margin-bottom: 20px; word-wrap: break-word; }
         }
 
         @media (max-width: 480px) {
