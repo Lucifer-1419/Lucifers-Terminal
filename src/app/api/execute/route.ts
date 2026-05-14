@@ -101,67 +101,80 @@ export async function POST(req: Request) {
         data: { tokens: { increment: 1 } }
       });
 
-      const hackerOutput = `[delay:800] [color:cyan][*][color:reset] Initializing MSF Exploit Framework v6.4.1...
-[delay:1000] [color:cyan][*][color:reset] Scanning target ports and protocols on 192.168.1.100...
-[delay:1200] [color:magenta][+][color:reset] Port 443 (HTTPS) is OPEN. Vulnerability found in SSH daemon.
-[delay:800] [color:cyan][*][color:reset] Preparing reverse TCP handler on local port 4444...
-[delay:1500] [color:cyan][*][color:reset] Injecting primary payload into memory...
-[delay:400] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▱▱▱▱▱▱▱▱▱[color:reset] 10%
-[delay:400] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▱▱▱▱▱▱▱[color:reset] 30%
-[delay:600] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▰▰▰▱▱▱▱[color:reset] 60%
-[delay:500] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▰▰▰▰▰▱▱[color:reset] 85%
-[delay:600] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▰▰▰▰▰▰▰[color:reset] 100%
-[delay:1000] [color:green][+][color:reset] Payload successfully injected into kernel space. Meterpreter session 1 opened.
-[delay:1200] [color:cyan][*][color:reset] Analyzing primary Neural-Net Firewall architecture...
-[delay:800] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓░░░░░░░░░[color:reset] 12%
-[delay:600] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓▓▓░░░░░░░[color:reset] 34%
-[delay:800] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓▓▓▓▓▓░░░░[color:reset] 68%
-[delay:600] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓▓▓▓▓▓▓▓▓▓[color:reset] 100%
-[delay:1000] [color:green][+][color:reset] Firewall rules analyzed. Initiating bypass...
-[delay:1800] [color:red][!][color:reset] WARNING: IDS detection spike detected! Active tracking engaged!
-[delay:1200] [color:yellow][>][color:reset] Deploying anti-forensics daemon to block tracking...
-[delay:1500] [color:yellow][>][color:reset] Rerouting packet transmission through deep-onion Tor network...
-[delay:2000] [color:green][+][color:reset] Reroute successful. Firewall bypassed. Connection obfuscated.
-[delay:1000] [color:cyan][*][color:reset] Navigating to secure token vault sector 7G...
-[delay:1200] [color:cyan][*][color:reset] Vault locked. Initiating brute-force cryptographic hash extraction...
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
-[delay:800] [update-line][color:green][+][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:green]MATCH FOUND![color:reset]
-[delay:1500] [color:cyan][*][color:reset] Encryption key shattered. Vault is OPEN.
-[delay:1000] [color:cyan][*][color:reset] Extracting raw token fragments...
-[delay:800] [update-line][color:cyan][*][color:reset] Recompiling fragments... [color:magenta]▓▓▓░░░░░░░[color:reset] 30%
-[delay:800] [update-line][color:cyan][*][color:reset] Recompiling fragments... [color:magenta]▓▓▓▓▓▓░░░░[color:reset] 60%
-[delay:1200] [update-line][color:cyan][*][color:reset] Recompiling fragments... [color:magenta]▓▓▓▓▓▓▓▓▓▓[color:reset] 100%
-[delay:1500] [color:green][+][color:reset] Token successfully compiled and verified against master ledger.
-[delay:2500] 
+      const hackerOutput = `[delay:1200] [color:cyan][*][color:reset] Initializing MSF Exploit Framework v6.4.1...
+[delay:2000] [color:cyan][*][color:reset] Scanning target ports and protocols on 192.168.1.100...
+[delay:3500] [color:magenta][+][color:reset] Port 443 (HTTPS) is OPEN. Vulnerability found in SSH daemon.
+[delay:1500] [color:cyan][*][color:reset] Preparing reverse TCP handler on local port 4444...
+[delay:2500] [color:cyan][*][color:reset] Injecting primary payload into memory...
+[delay:800] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▱▱▱▱▱▱▱▱▱[color:reset] 10%
+[delay:1200] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▱▱▱▱▱▱▱[color:reset] 30%
+[delay:1500] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▰▰▰▱▱▱▱[color:reset] 60%
+[delay:1000] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▰▰▰▰▰▱▱[color:reset] 85%
+[delay:1200] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▰▰▰▰▰▰▰[color:reset] 100%
+[delay:2000] [color:green][+][color:reset] Payload successfully injected into kernel space. Meterpreter session 1 opened.
+[delay:2500] [color:cyan][*][color:reset] Analyzing primary Neural-Net Firewall architecture...
+[delay:1500] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓░░░░░░░░░[color:reset] 12%
+[delay:1200] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓▓▓░░░░░░░[color:reset] 34%
+[delay:1500] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓▓▓▓▓▓░░░░[color:reset] 68%
+[delay:1800] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓▓▓▓▓▓▓▓▓▓[color:reset] 100%
+[delay:2000] [color:green][+][color:reset] Firewall rules analyzed. Initiating bypass...
+[delay:3000] [color:red][!][color:reset] WARNING: IDS detection spike detected! Active tracking engaged!
+[delay:2000] [color:yellow][>][color:reset] Deploying anti-forensics daemon to block tracking...
+[delay:3000] [color:yellow][>][color:reset] Rerouting packet transmission through deep-onion Tor network...
+[delay:2500] [color:green][+][color:reset] Reroute successful. Firewall bypassed. Connection obfuscated.
+[delay:2500] [color:cyan][*][color:reset] Initiating Deep-Scan on Security Rings...
+[delay:1500] [color:yellow][>][color:reset] Penetrating Ring 1 (External Routing)... [color:green]SUCCESS[color:reset]
+[delay:1800] [color:yellow][>][color:reset] Penetrating Ring 2 (Logic Nodes)... [color:green]SUCCESS[color:reset]
+[delay:2500] [color:yellow][>][color:reset] Penetrating Ring 3 (Core Kernel)... [color:green]SUCCESS[color:reset]
+[delay:2000] [color:cyan][*][color:reset] Navigating to secure token vault sector 7G...
+[delay:2500] [color:cyan][*][color:reset] Vault locked. Initiating brute-force cryptographic hash extraction...
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:400] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:2000] [update-line][color:green][+][color:reset] [CRACKING] MD5 0x${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:green]MATCH FOUND![color:reset]
+[delay:3000] [color:cyan][*][color:reset] Encryption key shattered. Vault is OPEN.
+[delay:2000] [color:cyan][*][color:reset] Extracting raw token fragments...
+[delay:1500] [update-line][color:cyan][*][color:reset] Recompiling fragments... [color:magenta]▓▓▓░░░░░░░[color:reset] 30%
+[delay:1500] [update-line][color:cyan][*][color:reset] Recompiling fragments... [color:magenta]▓▓▓▓▓▓░░░░[color:reset] 60%
+[delay:2000] [update-line][color:cyan][*][color:reset] Recompiling fragments... [color:magenta]▓▓▓▓▓▓▓▓▓▓[color:reset] 100%
+[delay:3000] [color:green][+][color:reset] Token successfully compiled and verified against master ledger.
+[delay:3000] 
 [color:green]██████████████████████████████████████████████████████
 █                                                    █
 █     [color:cyan]>>> ROOT PRIVILEGE TOKEN EXTRACTED <<<<[color:green]        █
 █                                                    █
-█          [color:yellow]TKN-\${Math.random().toString(36).substring(2, 12).toUpperCase()}[color:green]                      █
+█          [color:yellow]TKN-${Math.random().toString(36).substring(2, 12).toUpperCase()}[color:green]                      █
 █                                                    █
 ██████████████████████████████████████████████████████[color:reset]
-[delay:1500] 
-[delay:800] [color:cyan][*][color:reset] Token secured to local ledger.
-[delay:1000] [color:cyan][*][color:reset] Erasing event logs to cover tracks...
-[delay:800] [update-line][color:cyan][*][color:reset] Scrubbing logs... [color:red]████░░░░░░[color:reset] 40%
-[delay:800] [update-line][color:cyan][*][color:reset] Scrubbing logs... [color:red]████████░░[color:reset] 80%
-[delay:600] [update-line][color:cyan][*][color:reset] Scrubbing logs... [color:red]██████████[color:reset] 100%
-[delay:600] [color:cyan][*][color:reset] Wiping memory buffers...
-[delay:1200] [color:cyan][*][color:reset] Disconnecting session... [color:green]DONE.[color:reset]`;
+[delay:2000] 
+[delay:1500] [color:cyan][*][color:reset] Token secured to local ledger.
+[delay:1500] [color:cyan][*][color:reset] Synchronizing remote ledgers...
+[delay:1000] [update-line][color:cyan][*][color:reset] Syncing nodes... [color:blue]■■■□□□□□□□[color:reset] 30%
+[delay:1200] [update-line][color:cyan][*][color:reset] Syncing nodes... [color:blue]■■■■■■■□□□[color:reset] 70%
+[delay:1500] [update-line][color:cyan][*][color:reset] Syncing nodes... [color:blue]■■■■■■■■■■[color:reset] 100%
+[delay:2000] [color:cyan][*][color:reset] Erasing event logs to cover tracks...
+[delay:1200] [update-line][color:cyan][*][color:reset] Scrubbing logs... [color:red]████░░░░░░[color:reset] 40%
+[delay:1200] [update-line][color:cyan][*][color:reset] Scrubbing logs... [color:red]████████░░[color:reset] 80%
+[delay:1000] [update-line][color:cyan][*][color:reset] Scrubbing logs... [color:red]██████████[color:reset] 100%
+[delay:1500] [color:cyan][*][color:reset] Wiping memory buffers...
+[delay:2500] [color:cyan][*][color:reset] Disconnecting session... [color:green]DONE.[color:reset]`;
 
       return NextResponse.json({ output: hackerOutput, delayTime: 0 });
     }
