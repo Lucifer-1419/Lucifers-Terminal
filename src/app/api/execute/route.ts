@@ -64,17 +64,21 @@ export async function POST(req: Request) {
 
     if (command.trim() === './connect --host Lucifers_Server_v01') {
       await logCommand(true);
-      const connectOutput = `[delay:800] [color:cyan][*][color:reset] Resolving target host 'Lucifers_Server_v01'...
-[delay:1200] [color:green][+][color:reset] Host resolved to [color:yellow]192.168.1.100[color:reset].
-[delay:1000] [color:cyan][*][color:reset] Initiating secure handshake protocol...
+      const connectOutput = `[delay:800] [color:cyan][*][color:reset] Initializing outbound connection request to 'Lucifers_Server_v01'...
+[delay:1200] [color:yellow][>][color:reset] Resolving DNS and locating target server...
+[delay:1000] [color:green][+][color:reset] Target acquired at IP: [color:yellow]192.168.1.100[color:reset].
+[delay:800] [color:cyan][*][color:reset] Sending SYN packet to port 443...
+[delay:1500] [color:green][+][color:reset] SYN-ACK received. Server is acknowledging request.
+[delay:800] [color:cyan][*][color:reset] Sending ACK packet. Establishing TCP session...
 [delay:1500] [color:yellow][>][color:reset] Bouncing signal through proxy layer 1 (Moscow)...
 [delay:1200] [color:yellow][>][color:reset] Bouncing signal through proxy layer 2 (Reykjavik)...
 [delay:1500] [color:yellow][>][color:reset] Bouncing signal through proxy layer 3 (Panama)...
-[delay:1800] [color:green][+][color:reset] Signal bounced successfully. Target is ALIVE.
+[delay:1800] [color:green][+][color:reset] Signal obfuscated. Connection to server opened.
 [delay:1000] [color:cyan][*][color:reset] Negotiating RSA-4096 encryption keys...
-[delay:1500] [color:green][+][color:reset] Keys accepted. Exchanging certificates...
-[delay:1200] [color:cyan][*][color:reset] Securing outbound connection port 443...
-[delay:500] [color:green][+][color:reset] Connection to Lucifers_Server_v01 is SECURE.`;
+[delay:1500] [color:green][+][color:reset] Keys accepted. Exchanging SSL certificates...
+[delay:1200] [color:cyan][*][color:reset] Validating server certificate signature...
+[delay:1000] [color:green][+][color:reset] Signature valid. Securing data tunnel...
+[delay:800] [color:green][+][color:reset] Connection to Lucifers_Server_v01 is SECURE and ACTIVE.`;
       return NextResponse.json({ output: connectOutput, delayTime: 0 });
     }
 
@@ -108,22 +112,34 @@ export async function POST(req: Request) {
 [delay:500] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▰▰▰▰▰▱▱[color:reset] 85%
 [delay:600] [update-line][color:cyan][*][color:reset] Injecting payload... [color:blue]▰▰▰▰▰▰▰▰▰▰[color:reset] 100%
 [delay:1000] [color:green][+][color:reset] Payload successfully injected into kernel space. Meterpreter session 1 opened.
-[delay:1200] [color:cyan][*][color:reset] Bypassing primary Neural-Net Firewall...
+[delay:1200] [color:cyan][*][color:reset] Analyzing primary Neural-Net Firewall architecture...
+[delay:800] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓░░░░░░░░░[color:reset] 12%
+[delay:600] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓▓▓░░░░░░░[color:reset] 34%
+[delay:800] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓▓▓▓▓▓░░░░[color:reset] 68%
+[delay:600] [update-line][color:cyan][*][color:reset] Decrypting firewall rules... [color:yellow]▓▓▓▓▓▓▓▓▓▓[color:reset] 100%
+[delay:1000] [color:green][+][color:reset] Firewall rules analyzed. Initiating bypass...
 [delay:1800] [color:red][!][color:reset] WARNING: IDS detection spike detected! Active tracking engaged!
-[delay:1200] [color:yellow][>][color:reset] Deploying anti-forensics daemon...
+[delay:1200] [color:yellow][>][color:reset] Deploying anti-forensics daemon to block tracking...
 [delay:1500] [color:yellow][>][color:reset] Rerouting packet transmission through deep-onion Tor network...
 [delay:2000] [color:green][+][color:reset] Reroute successful. Firewall bypassed. Connection obfuscated.
 [delay:1000] [color:cyan][*][color:reset] Navigating to secure token vault sector 7G...
 [delay:1200] [color:cyan][*][color:reset] Vault locked. Initiating brute-force cryptographic hash extraction...
-[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x8F9B2A... [color:red]FAILED[color:reset]
-[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x11C9D2... [color:red]FAILED[color:reset]
-[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x7B22F1... [color:red]FAILED[color:reset]
-[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x4A00B1... [color:red]FAILED[color:reset]
-[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x9D8C7B... [color:red]FAILED[color:reset]
-[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x33A1F2... [color:red]FAILED[color:reset]
-[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x1122AA... [color:red]FAILED[color:reset]
-[delay:200] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x55FF33... [color:red]FAILED[color:reset]
-[delay:800] [update-line][color:green][+][color:reset] [CRACKING] MD5 0xFF28D9... [color:green]MATCH FOUND![color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:150] [update-line][color:yellow][>][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:red]FAILED[color:reset]
+[delay:800] [update-line][color:green][+][color:reset] [CRACKING] MD5 0x\${Math.random().toString(16).substring(2, 8).toUpperCase()}... [color:green]MATCH FOUND![color:reset]
 [delay:1500] [color:cyan][*][color:reset] Encryption key shattered. Vault is OPEN.
 [delay:1000] [color:cyan][*][color:reset] Extracting raw token fragments...
 [delay:800] [update-line][color:cyan][*][color:reset] Recompiling fragments... [color:magenta]▓▓▓░░░░░░░[color:reset] 30%
@@ -135,12 +151,15 @@ export async function POST(req: Request) {
 █                                                    █
 █     [color:cyan]>>> ROOT PRIVILEGE TOKEN EXTRACTED <<<<[color:green]        █
 █                                                    █
-█          [color:yellow]TKN-${Math.random().toString(36).substring(2, 12).toUpperCase()}[color:green]                      █
+█          [color:yellow]TKN-\${Math.random().toString(36).substring(2, 12).toUpperCase()}[color:green]                      █
 █                                                    █
 ██████████████████████████████████████████████████████[color:reset]
 [delay:1500] 
 [delay:800] [color:cyan][*][color:reset] Token secured to local ledger.
 [delay:1000] [color:cyan][*][color:reset] Erasing event logs to cover tracks...
+[delay:800] [update-line][color:cyan][*][color:reset] Scrubbing logs... [color:red]████░░░░░░[color:reset] 40%
+[delay:800] [update-line][color:cyan][*][color:reset] Scrubbing logs... [color:red]████████░░[color:reset] 80%
+[delay:600] [update-line][color:cyan][*][color:reset] Scrubbing logs... [color:red]██████████[color:reset] 100%
 [delay:600] [color:cyan][*][color:reset] Wiping memory buffers...
 [delay:1200] [color:cyan][*][color:reset] Disconnecting session... [color:green]DONE.[color:reset]`;
 
