@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import PWA from '@/components/PWA';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: "Lucifer's Terminal",
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body>
         <PWA />
         {children}
+        <Analytics />
       </body>
     </html>
   );
